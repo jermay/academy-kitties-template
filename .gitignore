@@ -1,2 +1,5 @@
 .secret
 truffle-config.js
+/build
+
+/node_modules
