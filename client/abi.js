@@ -1,6 +1,12 @@
 var abi = {
   kittyContract: [
     {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
       "anonymous": false,
       "inputs": [
         {
@@ -308,6 +314,11 @@ var abi = {
           "internalType": "uint256",
           "name": "_tokenId",
           "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_data",
+          "type": "bytes"
         }
       ],
       "name": "safeTransferFrom",
@@ -333,11 +344,6 @@ var abi = {
           "internalType": "uint256",
           "name": "_tokenId",
           "type": "uint256"
-        },
-        {
-          "internalType": "bytes",
-          "name": "_data",
-          "type": "bytes"
         }
       ],
       "name": "safeTransferFrom",
@@ -735,7 +741,7 @@ var abi = {
         },
         {
           "internalType": "bool",
-          "name": "activate",
+          "name": "active",
           "type": "bool"
         }
       ],
@@ -744,7 +750,7 @@ var abi = {
       "type": "function"
     },
     {
-      "constant": false,
+      "constant": true,
       "inputs": [],
       "name": "getAllTokenOnSale",
       "outputs": [
@@ -755,7 +761,7 @@ var abi = {
         }
       ],
       "payable": false,
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {

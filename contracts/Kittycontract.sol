@@ -181,7 +181,7 @@ contract Kittycontract is IERC721, Ownable {
         uint256 _generation,
         uint256 _genes,
         address _owner
-    ) private returns (uint256) {
+    ) internal returns (uint256) {
         Kitty memory _kitty = Kitty({
             genes: _genes,
             birthTime: uint64(now),
@@ -210,6 +210,7 @@ contract Kittycontract is IERC721, Ownable {
 
     function ownerOf(uint256 _tokenId) external view returns (address)
     {
+        require(_tokenId < kitties.length, "invalid tokenId");
         return kittyIndexToOwner[_tokenId];
     }
 
@@ -270,7 +271,7 @@ contract Kittycontract is IERC721, Ownable {
         return (_spender == _from || _approvedFor(_spender, _tokenId) || isApprovedForAll(_from, _spender));
     }
 
-    function _mixDna(uint256 _dadDna, uint256 _mumDna) internal returns (uint256){
+    function _mixDna(uint256 _dadDna, uint256 _mumDna) internal pure returns (uint256){
         //dadDna: 11 22 33 44 55 66 77 88 
         //mumDna: 88 77 66 55 44 33 22 11
 

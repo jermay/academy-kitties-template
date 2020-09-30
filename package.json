@@ -21,5 +21,9 @@
   "homepage": "https://github.com/Ivan-on-Tech-Academy/academy-kitties-template#readme",
   "dependencies": {
     "@truffle/hdwallet-provider": "^1.0.42"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "truffle-assertions": "^0.9.2"
   }
 }

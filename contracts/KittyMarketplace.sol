@@ -10,7 +10,7 @@ import "./Ownable.sol";
  * Note: It takes ownership of the kitty for the duration that it is on the marketplace
  */
 contract KittyMarketPlace is Ownable {
-    Kittycontract private _kittyContract;
+    Kittycontract internal _kittyContract;
 
     struct Offer {
         address payable seller;
@@ -49,6 +49,7 @@ contract KittyMarketPlace is Ownable {
 
     ) {
         Offer storage offer = tokenIdToOffer[_tokenId];
+        require(offer.active, "not active");
         return (
             offer.seller,
             offer.price,
@@ -58,7 +59,7 @@ contract KittyMarketPlace is Ownable {
         );
     }
 
-    function getAllTokenOnSale() public  returns(uint256[] memory listOfOffers){
+    function getAllTokenOnSale() public view returns(uint256[] memory listOfOffers){
       uint256 totalOffers = offers.length;
       
       if (totalOffers == 0) {
@@ -133,8 +134,8 @@ contract KittyMarketPlace is Ownable {
      */
     function buyKitty(uint256 _tokenId) public payable {
         Offer memory offer = tokenIdToOffer[_tokenId];
-        require(msg.value == offer.price, "The price is incorrect");
         require(tokenIdToOffer[_tokenId].active == true, "No active order present");
+        require(msg.value == offer.price, "The price is incorrect");     
 
         // Important: delete the kitty from the mapping BEFORE paying out to prevent reentry attacks
         delete tokenIdToOffer[_tokenId];
