@@ -580,20 +580,18 @@ contract.only('KittyContract', (accounts) => {
         beforeEach(async () => {
             testAccount = accounts[2];
             dad = {
-                kittyId: new BN('1'),
+                kittyId: kittyStartingIndex,
                 mumId: new BN('0'),
                 dadId: new BN('0'),
                 generation: new BN('0'),
-                cooldownIndex: new BN('0'),
                 genes: new BN('1112131415161718'),
                 owner: kittyOwner,
             };
             mum = {
-                kittyId: new BN('2'),
+                kittyId: kittyStartingIndex.add(new BN('1')),
                 mumId: new BN('0'),
                 dadId: new BN('0'),
                 generation: new BN('0'),
-                cooldownIndex: new BN('0'),
                 genes: new BN('2122232425262728'),
                 owner: kittyOwner,
             };
@@ -630,7 +628,7 @@ contract.only('KittyContract', (accounts) => {
                 result = await getKitty(expKitty.kittyId);
                 expectKitty(result, expKitty);
 
-                const actualOwner = await contractInstance.ownerOf(1);
+                const actualOwner = await contractInstance.ownerOf(expKitty.kittyId);
                 expect(actualOwner).to.equal(expKitty.owner);
             });
 
@@ -682,9 +680,11 @@ contract.only('KittyContract', (accounts) => {
 
         describe('Kittes of', () => {
             let testKitties;
+            let exptectedIds;
             beforeEach(async () => {
                 testKitties = [
                     {
+                        kittyId: kittyStartingIndex,
                         mumId: new BN('0'),
                         dadId: new BN('0'),
                         generation: new BN('0'),
@@ -692,6 +692,7 @@ contract.only('KittyContract', (accounts) => {
                         owner: contractOwner,
                     },
                     {
+                        kittyId: kittyStartingIndex.add(new BN('1')),
                         mumId: new BN('0'),
                         dadId: new BN('0'),
                         generation: new BN('0'),
@@ -699,6 +700,7 @@ contract.only('KittyContract', (accounts) => {
                         owner: testAccount,
                     },
                     {
+                        kittyId: kittyStartingIndex.add(new BN('2')),
                         mumId: new BN('0'),
                         dadId: new BN('0'),
                         generation: new BN('0'),
@@ -706,12 +708,15 @@ contract.only('KittyContract', (accounts) => {
                         owner: contractOwner,
                     },
                 ]
-                await Promise.all(testKitties.map(kitty => createKitty(kitty)));
+                for (let kitty of testKitties) {
+                    await createKitty(kitty);
+                }
+                exptectedIds = testKitties.filter(
+                    kitty => kitty.owner === contractOwner)
+                    .map(kitty => kitty.kittyId.toString(10));
             });
 
             it('should return all the kittyIds owned by the given address', async () => {
-                exptectedIds = ['1', '3'];
-
                 results = await getKittiesOf(contractOwner);
 
                 expect(results.length).to.equal(exptectedIds.length);
